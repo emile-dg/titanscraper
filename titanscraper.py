@@ -6,11 +6,8 @@ class TitanScraper():
 
     TARGETS = tuple()
 
-    scraped_data = dict()
-
-    def __init__(self, targets:tuple) -> None:
+    def __init__(self) -> None:
         print(f"TitanScraper version {self.VERSION}")
-        self.TARGETS = targets
 
     def start(self):
         pass
