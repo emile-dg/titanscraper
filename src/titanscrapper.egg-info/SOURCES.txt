@@ -1,8 +1,0 @@
-LICENSE
-README.md
-pyproject.toml
-setup.cfg
-src/titanscrapper.egg-info/PKG-INFO
-src/titanscrapper.egg-info/SOURCES.txt
-src/titanscrapper.egg-info/dependency_links.txt
-src/titanscrapper.egg-info/top_level.txt
