@@ -7,6 +7,15 @@ class BasicProcessors:
         pass
 
 #  Post Processors
+class Integer(BasicProcessors):
+    """Removes whatever whitespace to make a string valid for int casting but does not cast to integer. Characters and symbols are removed are ignored"""
+    def __init__(self, initial_value:str) -> None:
+        super().__init__()
+        self.__value = initial_value
+
+    def get_value(self) -> str:
+        return "".join(self.__value.split())
+
 class StringStripper(BasicProcessors):
 
     def __init__(self, initial_value:str) -> None:
