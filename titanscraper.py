@@ -75,14 +75,20 @@ class TitanScraper():
             elements = soup.select(rule.get('selector')) 
             if elements:
                 item_index = rule.get("index", 0)
+
                 # get the element from the list of elements
                 element = elements[item_index]
+
                 # preprocess the data
                 element = self.__preprocess_element(element, rule.get("preprocessors"))
+
                 # extract the value or content from the element
                 value = self.__extract_value(element, rule.get('attribute'))
+                
                 # apply data postprocessing
-                value = self.__postprocess_elememt(element, rule.get("postprocessors"))
+                value = self.__postprocess_value(value, rule.get("postprocessors"))
+                print(value)
+
                 # type casting
                 value = rule['type'](value) if rule.get('type') else str(value)
 
@@ -92,6 +98,8 @@ class TitanScraper():
                     for evaluator in rule.get('evaluators'):
                         if evaluator.evaluate(value):
                             data[rule.get('name')] = value
+                else:
+                    data[rule.get('name')] = value
 
         return data
 
@@ -129,7 +137,7 @@ class TitanScraper():
                 # raise
             else:
                 # those who failed the evaluations (if given) would not be added
-                if data:
+                if len(data):
                     data['source'] = target
                     results.append(data)
         return results
