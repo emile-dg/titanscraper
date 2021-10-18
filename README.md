@@ -1,11 +1,11 @@
 TITANScraper 
 =========
-v1.0.0
+v0.0.1
 
 
 Description
 ----------
-This is a simple but quite easy python library for scraping webpages easily and quickly. Give it a try!
+This is a simple but quite usefull python library for scraping webpages easily and quickly. Give it a try!
 
 Example
 ------

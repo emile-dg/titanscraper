@@ -6,7 +6,7 @@ from bs4 import BeautifulSoup
 class TitanScraper():
 
     AUTHOR = "Emile DJIDA GONGDEBIYA"
-    VERSION = "1.0.0"
+    VERSION = "0.0.1"
 
     TARGETS = tuple()
     HTML_PARSER = "lxml"
