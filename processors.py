@@ -52,9 +52,24 @@ class RemoveChar(BasicProcessors):
         return self
 
     def get_value(self) -> str:
-        val =  self.__value.replace(self.__char, "")
-        print("Obj val", val)
-        return val
+        return self.__value.replace(self.__char, "")
+
+class ExtractFromRegx(BasicProcessors):
+
+    def __init__(self, regex) -> None:
+        super().__init__()
+        self.__regex = regex
+
+    def set_value(self, value:str):
+        self.__value = str(value)
+        return self
+
+    def get_value(self) -> str:
+        substring = re.search(self.__regex, self.__value)
+        if substring:
+            return substring.group()
+        else:
+            return self.__value
 
 
 #  Evaluators
