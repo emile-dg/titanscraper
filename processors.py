@@ -1,3 +1,4 @@
+import datetime
 import re
 
 
@@ -71,6 +72,22 @@ class ExtractFromRegx(BasicProcessors):
         else:
             return self.__value
 
+class ToDate(BasicProcessors):
+
+    def __init__(self, format) -> None:
+        super().__init__()
+        self.__format = format
+
+    def set_value(self, value:str):
+        self.__value = str(value)
+        return self
+
+    def get_value(self) -> str:
+        try:
+            return datetime.datetime.strptime(self.__value, self.__format).date()
+        except:
+            raise
+
 
 #  Evaluators
 # NB: Evaluators evaluate() method always return a boolean value
@@ -86,3 +103,16 @@ class EqualsTo(BasicProcessors):
     def evaluate(self, comparative) -> bool:
         """evaluates the equals to condition"""
         return self.__conditional_value == comparative
+
+
+class GreatherOrEqual(BasicProcessors):
+    """This conditional processor is used to evaluate if a value is greather than to another or not"""
+
+    def __init__(self, conditional_value) -> None:
+        super().__init__()
+        self.__conditional_value = conditional_value
+
+    
+    def evaluate(self, comparative) -> bool:
+        """evaluates the equals to condition"""
+        return comparative >= self.__conditional_value

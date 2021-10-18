@@ -90,7 +90,7 @@ class TitanScraper():
                 # print(value)
 
                 # type casting
-                value = rule['type'](value) if rule.get('type') else str(value)
+                value = rule['type'](value) if rule.get('type') else value
 
                 # for conditional evaluations
                 # this adds the value to the final result only if it meets the evaluated conditions
