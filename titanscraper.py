@@ -52,7 +52,7 @@ class TitanScraper():
 
 
     @staticmethod
-    def __postprocess_elememt(value, processors:list=None):
+    def __postprocess_value(value, processors:list=None):
         """Apply the given postprocessings to an element's value"""
         if not processors:
             return value
