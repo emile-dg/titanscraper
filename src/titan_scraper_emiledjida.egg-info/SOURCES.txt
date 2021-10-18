@@ -1,0 +1,8 @@
+LICENSE
+README.md
+pyproject.toml
+setup.cfg
+src/titan_scraper_emiledjida.egg-info/PKG-INFO
+src/titan_scraper_emiledjida.egg-info/SOURCES.txt
+src/titan_scraper_emiledjida.egg-info/dependency_links.txt
+src/titan_scraper_emiledjida.egg-info/top_level.txt
