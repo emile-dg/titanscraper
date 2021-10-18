@@ -40,6 +40,22 @@ class ReplaceWith(BasicProcessors):
     def get_value(self) -> str:
         return self.__value.replace(self.__first_item, self.__second_item)
 
+class RemoveChar(BasicProcessors):
+
+    def __init__(self, char) -> None:
+        super().__init__()
+        self.__value = ""
+        self.__char = str(char)
+
+    def set_value(self, value:str):
+        self.__value = str(value)
+        return self
+
+    def get_value(self) -> str:
+        val =  self.__value.replace(self.__char, "")
+        print("Obj val", val)
+        return val
+
 
 #  Evaluators
 # NB: Evaluators evaluate() method always return a boolean value
