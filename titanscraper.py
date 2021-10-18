@@ -87,7 +87,7 @@ class TitanScraper():
                 
                 # apply data postprocessing
                 value = self.__postprocess_value(value, rule.get("postprocessors"))
-                print(value)
+                # print(value)
 
                 # type casting
                 value = rule['type'](value) if rule.get('type') else str(value)
@@ -98,6 +98,8 @@ class TitanScraper():
                     for evaluator in rule.get('evaluators'):
                         if evaluator.evaluate(value):
                             data[rule.get('name')] = value
+                        else:
+                            return {}
                 else:
                     data[rule.get('name')] = value
 
