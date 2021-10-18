@@ -10,7 +10,7 @@ This is a simple but quite usefull python library for scraping webpages easily a
 Example
 ------
 ```python
-from titanscraper import TitanScraperStringStripper
+from titanscraper import TitanScraper
 
 
 RULES = [
