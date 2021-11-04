@@ -15,7 +15,7 @@ class TitanScraper():
         pass
 
     @staticmethod
-    def __get_raw_html(link:str, timeout=5) -> tuple:
+    def __get_raw_html(link:str, timeout=10) -> tuple:
         """Gets the raw html of a given link.
         
         Arguments:
