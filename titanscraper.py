@@ -1,6 +1,8 @@
 from typing import runtime_checkable
 import requests
 from bs4 import BeautifulSoup
+import json
+import xmltodict
 
 
 class TitanScraper():
@@ -9,13 +11,13 @@ class TitanScraper():
     VERSION = "0.0.1"
 
     TARGETS = tuple()
-    HTML_PARSER = "lxml"
+    DOCUMENT_PARSER = ""
 
-    def __init__(self) -> None:
-        pass
+    def __init__(self, doc_parser='lxml') -> None:
+        self.DOCUMENT_PARSER = doc_parser
 
     @staticmethod
-    def __get_raw_html(link:str, timeout=10) -> tuple:
+    def __get_raw_resource(link:str, timeout=10) -> tuple:
         """Gets the raw html of a given link.
         
         Arguments:
@@ -48,7 +50,7 @@ class TitanScraper():
     @staticmethod
     def __extract_value(element, rule_attribute:str=None):
         """Extract the given attribbute of an element or it's text content"""
-        return element.get(rule_attribute) if rule_attribute else str(element.string)
+        return element.get(rule_attribute) if rule_attribute else str(element.text)
 
 
     @staticmethod
@@ -65,10 +67,22 @@ class TitanScraper():
                 value = processor.set_value(value).get_value()
         return value
 
+    
+    @staticmethod
+    def dict_to_json(dict_obj:dict) -> str:
+        """Convert a dictionary into a JSON string"""
+        return json.dumps(dict_obj)
+
+
+    @staticmethod
+    def dict_to_datalist(_dict:dict) -> tuple:
+        """returns a tuple of values from a dict"""
+        return tuple( _dict.values() )
+
 
     def __parse_data(self, html_doc:str, rules:tuple) -> dict:
         """Parse a given html document following a given set of rules and return the data"""
-        soup = BeautifulSoup(html_doc, self.HTML_PARSER)
+        soup = BeautifulSoup(html_doc, self.DOCUMENT_PARSER)
         data = {}
         for rule in rules:
             # get the elements following the selector
@@ -127,7 +141,7 @@ class TitanScraper():
         results = []
         for target in targets:
             # print("- processing ", target)
-            _ , raw_html = self.__get_raw_html(target)
+            _ , raw_html = self.__get_raw_resource(target)
             if not raw_html:
                 pass
 
@@ -142,19 +156,43 @@ class TitanScraper():
                 if len(data):
                     data['source'] = target
                     results.append(data)
+
         return results
 
     
     def get_links_from_page(self, target:str, page:str, rule:str='') -> list:
         """Get all links in a given page if no rule is passed, else based on the css selector"""
-        _, raw_html = self.__get_raw_html(target+page)
-        soup = BeautifulSoup(raw_html, self.HTML_PARSER)
+        _, raw_html = self.__get_raw_resource(target+page)
+        soup = BeautifulSoup(raw_html, self.DOCUMENT_PARSER)
         if rule:
             return [ target + link.get('href') for link in soup.select(f'{rule}') ] 
         else:
             return [ target + link.get('href') for link in soup.select('a') ] 
 
-    @staticmethod
-    def dict_to_datalist(_dict:dict) -> tuple:
-        """returns a tuple of values from a dict"""
-        return tuple( _dict.values() )
+
+    def xml_to_dict(self, xml_doc:str) -> dict:
+        """Takes a string of valid XML and returns a Json of the document tree"""
+        return json.loads( json.dumps( xmltodict.parse(xml_doc) ) )
+
+
+    def load_resource(self, resource:str, timeout:int=10) -> tuple:
+        """Gets an online resource and returns the status and content of the resource. 
+        Avoid downloading images with this. Use the `download_asset` method instead."""
+        return self.__get_raw_resource(resource, timeout=timeout)
+
+
+    def download_asset(self, asset_url:str, save_to:str=None, overwrite_file:bool=False) -> tuple:
+        """Downloads a given asset and returns the data with the response status.
+        If an argument for `save_to` is provided, then it will save it at the given location."""
+        return ()
+
+    def apply_postprocessing(self, value:str, postprocessors:tuple) -> str:
+        return self.__postprocess_value(value, postprocessors)
+
+    def extract_text(self, markup:str, selector:str=None) -> str:
+        soup = BeautifulSoup(markup, self.DOCUMENT_PARSER)
+        if selector:
+            items = soup.select(selector)
+            return " ".join([item.text for item in items])
+        else:
+            return str(soup.text)
