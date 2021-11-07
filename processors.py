@@ -55,6 +55,24 @@ class RemoveChar(BasicProcessors):
     def get_value(self) -> str:
         return self.__value.replace(self.__char, "")
 
+class ToUpperCase(BasicProcessors):
+
+    def __init__(self, initial_value:str) -> None:
+        super().__init__()
+        self.__value = initial_value
+
+    def get_value(self) -> str:
+        return self.__value.upper()
+
+class ToLowerCase(BasicProcessors):
+
+    def __init__(self, initial_value:str) -> None:
+        super().__init__()
+        self.__value = initial_value
+
+    def get_value(self) -> str:
+        return self.__value.lower()
+
 class ExtractFromRegx(BasicProcessors):
 
     def __init__(self, regex) -> None:
@@ -72,19 +90,33 @@ class ExtractFromRegx(BasicProcessors):
         else:
             return self.__value
 
-class ToDate(BasicProcessors):
+
+class ToDatetime(BasicProcessors):
 
     def __init__(self, format) -> None:
         super().__init__()
         self.__format = format
 
     def set_value(self, value:str):
-        self.__value = str(value)
+        self.value = str(value)
         return self
 
     def get_value(self) -> str:
         try:
-            return datetime.datetime.strptime(self.__value, self.__format).date()
+            return datetime.datetime.strptime(self.value, self.__format)
+        except:
+            raise
+
+
+class ToDate(ToDatetime):
+
+    def __init__(self, format) -> None:
+        super().__init__(format)
+        self.__format = format
+
+    def get_value(self) -> str:
+        try:
+            return datetime.datetime.strptime(self.value, self.__format).date()
         except:
             raise
 
