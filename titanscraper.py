@@ -1,4 +1,3 @@
-from typing import runtime_checkable
 import requests
 from bs4 import BeautifulSoup
 import json
@@ -7,8 +6,8 @@ import xmltodict
 
 class TitanScraper():
 
-    AUTHOR = "Emile DJIDA GONGDEBIYA"
-    VERSION = "0.0.1"
+    __AUTHOR = "Emile DJIDA GONGDEBIYA"
+    __VERSION = "0.0.2"
 
     TARGETS = tuple()
     DOCUMENT_PARSER = ""
