@@ -70,7 +70,7 @@ class TitanScraper():
     @staticmethod
     def dict_to_json(dict_obj:dict) -> str:
         """Convert a dictionary into a JSON string"""
-        return json.dumps(dict_obj)
+        return json.dumps(dict_obj, ensure_ascii=False)
 
 
     @staticmethod
