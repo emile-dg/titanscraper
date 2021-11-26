@@ -90,5 +90,8 @@ Print your data to see what you have recieved as result.
 ```python
 print(data)
 ```
+In normal circumstances (all pages scraped without error), the length of the list `data`
+will be equal to the length of the list `target_pages` and the length of each item in 
+`data` will be the same as the number of rules in rule.
 
 Check python scripts in `/examples` directory to try real examples
