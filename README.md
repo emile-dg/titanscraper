@@ -5,39 +5,90 @@ v0.0.1
 
 Description
 ----------
-This is a simple but quite usefull python library for scraping webpages easily and quickly. Give it a try!
+This is a simple but quite usefull python library for scraping webpages easily and quickly.
+
+
+Installation
+----------
+```
+pip install titanscraper
+```
 
 Example
 ------
+Assuming you have installed the library using pip as above,
+the next thing to do is to import the module
 ```python
 from titanscraper import TitanScraper
 
 
+scraper = TitanScraper()
+```
+
+Then you need to define `rules`. Rules are basically the instructions given to
+the scraper to describe how to collect and name the data from a webpage. The most basic 
+structure of a rule is as follows:
+```python
+{
+    "name": "item_name",
+    "selector": "some-css-selector",
+}
+```
+
+<p>
+    The attribute `name` describes the name that will be given to specific data scraped from an 
+    element that matches the selector in `selector`. Where `selector` is a valid CSS selector that actually references an HTML DOM element.
+</p>
+<br/>
+<p>
+    For example, assuming you want to collect the price of an item from an e-commerce website
+    where the price of the product is found within a `span` with class name `price` that is in an article object with class name `product`, you might want to do the following:
+</p> 
+
+```python
+{
+    "name": "price",
+    "selector": "article.product > span.price",
+}
+```
+
+Now you define your rules as a list as follows:
+```python 
 RULES = [
     {
-        "name": "article_data",
-        "selector": "[class^='textnoir9bold']:nth-child(7)",
-        "type": str,
+        "name": "product-title",
+        "selector": "article.product > span.name"
+    },
+    {
+        "name": "product-price",
+        "selector": "article.product > span.price"
     }
 ]
+```
+The next thing to do is to define your target webpages. This is just a list of URLS
+```python
+#  define a list of all the web pages you intend to scrap
 target_pages = [
     "https://www.target_website.fr/target_one",
     "https://www.target_website.fr/target_two",
-    "https://www.target_website.fr/target_three",
-    "https://www.target_website.fr/target_four",
 ]
+```
 
-scraper = TitanScraper()
+With that set, now you can scrap the data from all the pages in `target_pages` and parse data using the rules defined in `RULES` above as follows
+
+```python
+# start the scraping of the target webpages.
 data = scraper.scrap(target_pages, RULES)
+# The value returned from `scraper.scrap` is 
 print(data)
 ```
-For more examples check the examples folder (coming soon)
 
+The data returned by `TitanScraper.scrap` is a list of dictionaries
+where the keys are the values from `name` in `RULES` and the values are
+the data collected from the corresponding `selector` in the same rule.
+Print your data to see what you have recieved as result.
+```python
+print(data)
+```
 
-Future Features
---------
-- Javascript rendering support with selenium
-- User agents support
-- Proxy support and proxy rotation
-- Captcha bypass
-- JSON and YAML support for rules defintion
+Check python scripts in `/examples` directory to try real examples
