@@ -2,12 +2,14 @@ import json
 import logging
 import os
 from logging import Logger
+from .processors import *
 
 import requests
 import xmltodict
 from bs4 import BeautifulSoup
 
 from .config import *
+from src import processors
 
 
 
@@ -218,3 +220,89 @@ class TitanScraper():
             return " ".join([item.text for item in items])
         else:
             return str(soup.text)
+
+    def __load_preprocessor_obj(self, preprocessors_str:str) -> object:
+        """Converts a str into a processor obj or ref"""
+        pass
+
+
+    @staticmethod
+    def __check_rules_for_typos(obj:dict) -> bool:
+        """Returns `false` if the test is ok, else the key which is invalid"""
+        _supported_keys = ["name", "attribute", "postprocessors", 
+                            "type", "preprocessors", "evaluators", "selector"
+                            ]
+        for key in obj.keys():
+            if key not in _supported_keys:
+                return key
+
+
+    @staticmethod
+    def __processor_from_string(processor) -> object:
+        """Evaluates a given processor definition string into an actual object or class reference"""
+        try:
+           return eval(processor)
+
+        except EOFError:
+            raise EOFError()
+
+        except TypeError :
+            raise Exception(f"Wrong definition of Processor `{processor}`")
+            
+        except NameError :
+            raise Exception(f"Processor `{processor}` is undefined. Check the documentation on processors")
+
+
+
+    def __rules_from_json(self, filep) -> list:
+        """Reads rules from a json file"""
+        _content = json.load(filep)
+        for item in _content: 
+
+            # each item needs to pass a syntax test to avoid typos in file
+            typo = self.__check_rules_for_typos(item)
+            if typo:
+                raise Exception(f"Invalid attribute `{typo}` in rules")
+
+            #  convert the preprocessors into parsable objects
+            if item.get('preprocessors'):
+                precessors_objs = [ self.__processor_from_string(preprecessor)
+                                    for preprecessor in item['preprocessors']  ]
+                item['preprocessors'] = precessors_objs
+
+            
+            # convert the postprocessors into callable objects or classes
+            if item.get('postprocessors'):
+                processors_objs = [ self.__processor_from_string(postprocessor)
+                                    for postprocessor in item['postprocessors']  ]
+                item['postprocessors'] = processors_objs
+
+
+            # convert the evaluators into 
+            if item.get('evaluators'):
+                evaluators_objs = [ self.__processor_from_string(evaluator)
+                                    for evaluator in item['evaluators']  ]
+                item['evaluators'] = evaluators_objs
+
+
+        return _content
+
+
+    def load_rules(self, filepath:str, format:str="json") -> list:
+        """Load rules from a `json` file \n 
+        Arguments:\n
+        filepath: path to the rules file\n
+        format: the format used to store the rules, it is either `json`"""
+
+        _supported_formats = [ 'json' ]
+        if format.lower() not in _supported_formats:
+            raise Exception("Unsupported rules format given")
+
+        # there are certain error which can occur at this stage.
+        # Those potential errors are:
+        # - Non-Matching format and file extention (so i need to compare the format and extension)
+        # - Invalid file resulting from file parsing
+        
+        if format.lower() == "json":
+            with open(filepath, "r") as file:
+                return self.__rules_from_json(file)
