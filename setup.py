@@ -6,7 +6,7 @@ README = (HERE / "README.md").read_text()
 
 setup(
     name="titanscraper",
-    version="0.0.20",
+    version="0.0.21",
     description="A web scraping library that makes web-scraping easy",
     long_description=README,
     long_description_content_type="text/markdown",
