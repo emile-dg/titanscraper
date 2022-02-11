@@ -9,14 +9,13 @@ import xmltodict
 from bs4 import BeautifulSoup
 
 from .config import *
-from titanscraper import processors
+from titanscraper import processors, __version__
 
 
 
 class TitanScraper():
 
     __AUTHOR = "Emile DJIDA GONGDEBIYA"
-    __VERSION = "0.0.20"
 
     TARGETS = tuple()
     DOCUMENT_PARSER = ""
@@ -29,7 +28,7 @@ class TitanScraper():
         self.logger.setLevel(LOGGING_LEVEL)
         self.logger.addHandler(LOGGING_FILE_HANDLER)
         self.logger.addHandler(LOGGING_STREAM_HANDLER)
-        self.logger.info(f"Starting TitanScraper v{self.__VERSION}")
+        self.logger.info(f"Starting TitanScraper v{__version__}")
 
     def __get_raw_resource(self, link:str, timeout=10) -> tuple:
         """Gets the raw html of a given link.
