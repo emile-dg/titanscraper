@@ -1,4 +1,4 @@
-from src import TitanScraper
+from titanscraper import TitanScraper
 from pprint import pprint
 
 

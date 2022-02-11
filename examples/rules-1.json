@@ -1,0 +1,14 @@
+[
+    {
+        "name": "title",
+        "selector": "h3",
+        "postprocessors": [
+            "StringStripper",
+            "ReplaceWith('^', '')"
+        ],
+        "evaluators": [],
+        "preprocessors": [  
+            "lambda x: str(x)+1"
+        ]
+    }
+]

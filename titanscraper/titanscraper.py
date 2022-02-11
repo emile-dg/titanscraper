@@ -9,14 +9,14 @@ import xmltodict
 from bs4 import BeautifulSoup
 
 from .config import *
-from src import processors
+from titanscraper import processors
 
 
 
 class TitanScraper():
 
     __AUTHOR = "Emile DJIDA GONGDEBIYA"
-    __VERSION = "0.0.1"
+    __VERSION = "0.0.20"
 
     TARGETS = tuple()
     DOCUMENT_PARSER = ""
